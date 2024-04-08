@@ -179,8 +179,8 @@ void onNewData()
             maxALSCount = ALSCount[i];
     }
 
-    menuCurrentUVIndex.setCurrentValue(maxUVCount);
-    menuAmbientLight.setCurrentValue(maxALSCount);
+    menuCurrentUVIndex.setCurrentValue((uint16_t) maxUVCount);
+    menuAmbientLight.setCurrentValue((uint16_t) maxALSCount);
 }
 void drawActiveMode(unsigned int encoderValue, RenderPressMode clicked)
 {
