@@ -21,7 +21,9 @@ Adafruit_MAX17048 batteryMonitor;
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 QWIICMUX mux; 
-Adafruit_LTR390 sensor = Adafruit_LTR390();
+Adafruit_LTR390 sensor[3];
+unsigned long UVCount[3];
+unsigned long ALSCount[3];
 
 void D0ISR();
 void D1ISR();
@@ -29,7 +31,8 @@ void D2ISR();
 void changeState(STATE newState);
 bool buttonWasPressed(BUTTON button);
 void sendStatusOverSerial();
-void drawActiveMode(unsigned int encoderValue, RenderPressMode clicked);
+void refreshSensorData();
+void onNewData();
 
 void setup()
 {
@@ -66,19 +69,21 @@ void setup()
     display.fillScreen(ST77XX_BLACK);
     Serial.println(F("Display Initialized Sucessfully"));
 
-    /*
     //i2c multiplexer
+    Wire.begin();
     mux.begin();
+    mux.setPort(0);
     //init sensors
-    sensor.begin();
     for(int i = 0; i<3; i++)
     {
-        mux.setPort(0);
-        sensor.setGain(LTR390_GAIN_18);
-        sensor.setResolution(LTR390_RESOLUTION_20BIT);
+        mux.setPort(i);
+        sensor[i] = Adafruit_LTR390();
+        sensor[i].begin();
+        sensor[i].setGain(LTR390_GAIN_18);
+        sensor[i].setResolution(LTR390_RESOLUTION_20BIT);
     }
-    //initialize state
-    */
+    
+
    //WIFI AND TIME
     //WiFi.mode(WIFI_STA);
     //WiFi.begin(WLAN_SSID, WLAN_PASSWORD);
@@ -89,7 +94,8 @@ void setup()
 }
 void loop()
 {
-    //sendStatusOverSerial();
+    sendStatusOverSerial();
+    refreshSensorData();
 
     //remap button with inverse logic
     pinMode(17, OUTPUT);
@@ -144,6 +150,37 @@ void changeState(STATE newState)
 
 void refreshSensorData()
 {
+    for(int i = 0; i < 3; i++)
+    {
+        mux.setPort(i);
+        if(sensor[i].newDataAvailable())
+        {
+            sensor[i].setMode(LTR390_MODE_UVS);
+            UVCount[i]=sensor[i].readUVS();
+            sensor[i].setMode(LTR390_MODE_ALS);
+            ALSCount[i]=sensor[i].readALS();
+            onNewData();
+        }
+    }
+}
+
+void onNewData()
+{
+    unsigned long maxUVCount = 0;
+    unsigned long maxALSCount = 0;
+    for(int i = 0; i<3; i++)
+    {
+        if(maxUVCount<UVCount[i])
+            maxUVCount = UVCount[i];
+    }
+    for(int i = 0; i<3; i++)
+    {
+        if(maxALSCount<ALSCount[i])
+            maxALSCount = ALSCount[i];
+    }
+
+    menuCurrentUVIndex.setCurrentValue(maxUVCount);
+    menuAmbientLight.setCurrentValue(maxALSCount);
 }
 void drawActiveMode(unsigned int encoderValue, RenderPressMode clicked)
 {
@@ -218,12 +255,12 @@ void sendStatusOverSerial()
     // else
     //     Serial.println(&timeinfo, "Date/Time: %A, %B %d %Y %H:%M:%S");
 
-    Serial.print("Current State: "); Serial.println(currentState);
-    Serial.print("Previous State: "); Serial.println(previousState);
-    Serial.print(F("Batt Voltage: ")); Serial.print(batteryMonitor.cellVoltage(), 3); Serial.println(" V");
-    Serial.print(F("Batt Percent: ")); Serial.print(batteryMonitor.cellPercent(), 1); Serial.println(" %");
-    Serial.print("Wifi Status: "); Serial.println(WiFi.status());
+    Serial.printf("Current State: %d\n", currentState);
+    Serial.printf("Previous State: "); Serial.println(previousState);
+    Serial.printf("Batt Voltage: %.3fV\n", batteryMonitor.cellVoltage());
+    Serial.printf("Batt Percent: %.1f%%\n", batteryMonitor.cellPercent());
+    Serial.printf("Wifi Status: %d\n", WiFi.status());
+    Serial.printf("UVCount Data: %d %d %d\n", UVCount[0], UVCount[1], UVCount[2]);
+    Serial.printf("ALSCount Data: %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2]);
     Serial.println("---------------------------------");
-    
-
 }

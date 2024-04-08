@@ -13,11 +13,47 @@
         "divisor": 1,
         "unitName": " UVI",
         "step": 1,
-        "name": "UV Index",
-        "variableName": "UVIndex",
+        "name": "Current UV Index",
+        "variableName": "CurrentUVIndex",
         "id": 9,
         "eepromAddress": 17,
         "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "enumItem",
+      "defaultValue": "0",
+      "item": {
+        "enumEntries": [
+          "None",
+          "UV Exposure",
+          "Ambient Light"
+        ],
+        "name": "Active Alert",
+        "variableName": "ActiveAlert",
+        "id": 12,
+        "eepromAddress": 19,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "boolItem",
+      "defaultValue": "false",
+      "item": {
+        "naming": "CHECKBOX",
+        "name": "Dismiss Alert",
+        "variableName": "DismissAlert",
+        "id": 11,
+        "eepromAddress": -1,
+        "readOnly": false,
         "localOnly": false,
         "visible": true,
         "staticDataInRAM": false
@@ -151,52 +187,6 @@
         "variableName": "OptionsAmbientLightOptionsAlerts",
         "id": 8,
         "eepromAddress": 16,
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 0,
-      "type": "subMenu",
-      "item": {
-        "secured": false,
-        "name": "Alerts",
-        "variableName": "UVExposureAlertAlerts",
-        "id": 12,
-        "eepromAddress": -1,
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 12,
-      "type": "subMenu",
-      "item": {
-        "secured": false,
-        "name": "UV Exposure Alert",
-        "variableName": "UVExposureAlert",
-        "id": 10,
-        "eepromAddress": -1,
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 10,
-      "type": "boolItem",
-      "defaultValue": "false",
-      "item": {
-        "naming": "CHECKBOX",
-        "name": "Dismiss Alert",
-        "variableName": "UVExposureAlertDismissAlert",
-        "id": 11,
-        "eepromAddress": -1,
         "readOnly": false,
         "localOnly": false,
         "visible": true,

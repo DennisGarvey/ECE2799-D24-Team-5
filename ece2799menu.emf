@@ -25,6 +25,26 @@
     },
     {
       "parentId": 0,
+      "type": "analogItem",
+      "defaultValue": "0",
+      "item": {
+        "maxValue": 65535,
+        "offset": 0,
+        "divisor": 1,
+        "unitName": "",
+        "step": 1,
+        "name": "Ambient Light",
+        "variableName": "AmbientLight",
+        "id": 13,
+        "eepromAddress": 21,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
       "type": "enumItem",
       "defaultValue": "0",
       "item": {
