@@ -8,7 +8,7 @@
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
-        "maxValue": 255,
+        "maxValue": 11,
         "offset": 0,
         "divisor": 1,
         "unitName": " UVI",
@@ -176,6 +176,27 @@
         "variableName": "OptionsSunscreenOptionsSPFLevel",
         "id": 6,
         "eepromAddress": 14,
+        "readOnly": false,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 4,
+      "type": "analogItem",
+      "defaultValue": "120",
+      "item": {
+        "maxValue": 300,
+        "offset": 0,
+        "divisor": 1,
+        "unitName": "min",
+        "step": 10,
+        "name": "Reminder Interval",
+        "variableName": "OptionsSunscreenOptionsReminderInterval",
+        "id": 14,
+        "eepromAddress": -1,
+        "functionName": "onSunscrnRmdrIntvlChange",
         "readOnly": false,
         "localOnly": false,
         "visible": true,

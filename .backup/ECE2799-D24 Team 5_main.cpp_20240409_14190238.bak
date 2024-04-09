@@ -94,7 +94,7 @@ void setup()
 }
 void loop()
 {
-    //sendStatusOverSerial();
+    sendStatusOverSerial();
     refreshSensorData();
 
     //remap button with inverse logic
@@ -182,6 +182,27 @@ void onNewData()
     menuCurrentUVIndex.setCurrentValue((uint16_t) UVI);
     menuAmbientLight.setCurrentValue((uint16_t) maxALSCount);
 }
+void drawActiveMode(unsigned int encoderValue, RenderPressMode clicked)
+{
+    display.drawRect(0,0, 240, 135, ST77XX_GREEN);
+    display.drawRect(50, 50, 50, 50, ST77XX_WHITE);
+    display.setTextWrap(false);
+    display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
+    display.setTextSize(1);
+    
+    //time
+    display.drawRect(5,5, 160, 25, ST77XX_WHITE);
+    struct tm timeinfo;
+    //getLocalTime(&timeinfo);
+    display.setCursor(10, 10);
+    display.println(&timeinfo, "%A, %B %d %Y");
+    display.setCursor(10, 20);
+    display.println(&timeinfo, "%H:%M:%S");
+    //battery percent
+    display.setCursor(175, 10);
+    display.printf("Bat:%.1f%%", batteryMonitor.cellPercent());
+
+}
 
 bool buttonWasPressed(BUTTON button)
 {
@@ -191,7 +212,7 @@ bool buttonWasPressed(BUTTON button)
 }
 void D0ISR() 
 {
-    //menuActiveAlert.setCurrentValue(1); //test alert
+    menuActiveAlert.setCurrentValue(1);
     static unsigned long lastInterrupt = 0;
     unsigned long thisInterrupt = millis();
 
@@ -244,10 +265,4 @@ void sendStatusOverSerial()
     Serial.printf("UVI Data: %lf %lf %lf\n", UVCount[0]/2300.0, UVCount[1]/2300.0, UVCount[2]/2300.0);
     Serial.printf("ALSCount Data: %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2]);
     Serial.println("---------------------------------");
-}
-
-
-
-void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id) {
-    Serial.println(id);
 }

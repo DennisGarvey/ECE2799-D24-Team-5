@@ -31,6 +31,7 @@ extern GraphicsDeviceRenderer renderer;
 extern BooleanMenuItem menuOptionsAmbientLightOptionsAlerts;
 extern BackMenuItem menuBackOptionsAmbientLightOptions;
 extern SubMenuItem menuOptionsAmbientLightOptions;
+extern AnalogMenuItem menuOptionsSunscreenOptionsReminderInterval;
 extern AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel;
 extern BooleanMenuItem menuOptionsSunscreenOptionsSunscreenReminder;
 extern BackMenuItem menuBackOptionsSunscreenOptions;
@@ -51,5 +52,6 @@ void setupMenu();
 // Callback functions must always include CALLBACK_FUNCTION after the return type
 #define CALLBACK_FUNCTION
 
+void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id);
 
 #endif // MENU_GENERATED_CODE_H
