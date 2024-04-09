@@ -25,6 +25,8 @@ Adafruit_LTR390 sensor[3];
 unsigned long UVCount[3];
 unsigned long ALSCount[3];
 
+unsigned long nextSunscreenReminder = -1; 
+
 void D0ISR();
 void D1ISR();
 void D2ISR();
@@ -33,6 +35,8 @@ bool buttonWasPressed(BUTTON button);
 void sendStatusOverSerial();
 void refreshSensorData();
 void onNewData();
+void changeSunscreenInterval(int minutes);
+void checkSunscreenReminderAlert();
 
 void setup()
 {
@@ -94,7 +98,8 @@ void setup()
 }
 void loop()
 {
-    sendStatusOverSerial();
+    if(millis()%100==0)
+        sendStatusOverSerial();
     refreshSensorData();
 
     //remap button with inverse logic
@@ -110,14 +115,8 @@ void loop()
     //menu loop
     taskManager.runLoop();
 
-    //dismiss alert functionality
-    if(menuDismissAlert.getBoolean())
-    {
-        menuActiveAlert.setCurrentValue(0);
-        menuDismissAlert.setBoolean(false);
-        noTone(16);
-    }
-
+    //check if sunscreen threshold has passed
+    checkSunscreenReminderAlert();
     //buzzer siren functionality
     if(menuActiveAlert.getCurrentValue()>0)
     {
@@ -155,8 +154,8 @@ void refreshSensorData()
         mux.setPort(i);
         if(sensor[i].newDataAvailable())
         {
-            sensor[i].setMode(LTR390_MODE_ALS);
-            ALSCount[i]=sensor[i].readALS();
+            // sensor[i].setMode(LTR390_MODE_ALS);
+            // ALSCount[i]=sensor[i].readALS();
             sensor[i].setMode(LTR390_MODE_UVS);
             UVCount[i]=sensor[i].readUVS();
             onNewData();
@@ -179,29 +178,8 @@ void onNewData()
             maxALSCount = ALSCount[i];
     }
     double UVI = maxUVCount/2300.0;
-    menuCurrentUVIndex.setCurrentValue((uint16_t) UVI);
+    menuCurrentUVIndex.setCurrentValue((uint16_t) (UVI*10));
     menuAmbientLight.setCurrentValue((uint16_t) maxALSCount);
-}
-void drawActiveMode(unsigned int encoderValue, RenderPressMode clicked)
-{
-    display.drawRect(0,0, 240, 135, ST77XX_GREEN);
-    display.drawRect(50, 50, 50, 50, ST77XX_WHITE);
-    display.setTextWrap(false);
-    display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
-    display.setTextSize(1);
-    
-    //time
-    display.drawRect(5,5, 160, 25, ST77XX_WHITE);
-    struct tm timeinfo;
-    //getLocalTime(&timeinfo);
-    display.setCursor(10, 10);
-    display.println(&timeinfo, "%A, %B %d %Y");
-    display.setCursor(10, 20);
-    display.println(&timeinfo, "%H:%M:%S");
-    //battery percent
-    display.setCursor(175, 10);
-    display.printf("Bat:%.1f%%", batteryMonitor.cellPercent());
-
 }
 
 bool buttonWasPressed(BUTTON button)
@@ -212,7 +190,7 @@ bool buttonWasPressed(BUTTON button)
 }
 void D0ISR() 
 {
-    menuActiveAlert.setCurrentValue(1);
+    menuActiveAlert.setCurrentValue(1); //test alert
     static unsigned long lastInterrupt = 0;
     unsigned long thisInterrupt = millis();
 
@@ -264,5 +242,35 @@ void sendStatusOverSerial()
     Serial.printf("UVCount Data: %d %d %d\n", UVCount[0], UVCount[1], UVCount[2]);
     Serial.printf("UVI Data: %lf %lf %lf\n", UVCount[0]/2300.0, UVCount[1]/2300.0, UVCount[2]/2300.0);
     Serial.printf("ALSCount Data: %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2]);
+    Serial.printf("Seconds till sunscreen reminder: %d\n", (nextSunscreenReminder-millis())/1000);
     Serial.println("---------------------------------");
+}
+
+
+
+void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id) 
+{
+    changeSunscreenInterval(menuOptionsSunscreenOptionsReminderInterval.getCurrentValue()+10);
+}
+
+void changeSunscreenInterval(int minutes)
+{
+    nextSunscreenReminder = millis()+minutes*(unsigned long)(60*1000);
+}
+void checkSunscreenReminderAlert()
+{
+    if(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean() && millis()>nextSunscreenReminder)
+    {
+        menuActiveAlert.setCurrentValue(3);
+        changeSunscreenInterval(menuOptionsSunscreenOptionsReminderInterval.getCurrentValue()+10);
+    }
+}
+void CALLBACK_FUNCTION onDismissAlert(int id) 
+{
+    if(menuDismissAlert.getBoolean())
+    {
+        menuActiveAlert.setCurrentValue(0);
+        noTone(16);
+        menuDismissAlert.setBoolean(false);
+    }
 }

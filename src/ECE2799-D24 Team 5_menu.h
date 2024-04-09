@@ -42,7 +42,7 @@ extern SubMenuItem menuOptions;
 extern TextMenuItem menuBattery;
 extern BooleanMenuItem menuDismissAlert;
 extern EnumMenuItem menuActiveAlert;
-extern AnalogMenuItem menuAmbientLight;
+extern AnalogMenuItem menuMinUntilNextRmdr;
 extern AnalogMenuItem menuCurrentUVIndex;
 
 // Provide a wrapper to get hold of the root menu item and export setupMenu
@@ -52,6 +52,8 @@ void setupMenu();
 // Callback functions must always include CALLBACK_FUNCTION after the return type
 #define CALLBACK_FUNCTION
 
+void CALLBACK_FUNCTION onDismissAlert(int id);
+void CALLBACK_FUNCTION onSunscreenReminderToggle(int id);
 void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id);
 
 #endif // MENU_GENERATED_CODE_H

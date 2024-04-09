@@ -25,11 +25,11 @@ BooleanMenuItem menuOptionsAmbientLightOptionsAlerts(&minfoOptionsAmbientLightOp
 const PROGMEM SubMenuInfo minfoOptionsAmbientLightOptions = { "Ambient Light", 7, 0xffff, 0, NO_CALLBACK };
 BackMenuItem menuBackOptionsAmbientLightOptions(&minfoOptionsAmbientLightOptions, &menuOptionsAmbientLightOptionsAlerts, INFO_LOCATION_PGM);
 SubMenuItem menuOptionsAmbientLightOptions(&minfoOptionsAmbientLightOptions, &menuBackOptionsAmbientLightOptions, nullptr, INFO_LOCATION_PGM);
-const PROGMEM AnalogMenuInfo minfoOptionsSunscreenOptionsReminderInterval = { "Reminder Interval", 14, 0xffff, 300, onSunscrnRmdrIntvlChange, 0, 1, "min" };
-AnalogMenuItem menuOptionsSunscreenOptionsReminderInterval(&minfoOptionsSunscreenOptionsReminderInterval, 120, nullptr, INFO_LOCATION_PGM);
+const PROGMEM AnalogMenuInfo minfoOptionsSunscreenOptionsReminderInterval = { "Reminder Interval", 14, 0xffff, 290, onSunscrnRmdrIntvlChange, 10, 1, "min" };
+AnalogMenuItem menuOptionsSunscreenOptionsReminderInterval(&minfoOptionsSunscreenOptionsReminderInterval, 110, nullptr, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoOptionsSunscreenOptionsSPFLevel = { "SPF Level", 6, 14, 100, NO_CALLBACK, 0, 1, "" };
 AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel(&minfoOptionsSunscreenOptionsSPFLevel, 0, &menuOptionsSunscreenOptionsReminderInterval, INFO_LOCATION_PGM);
-const PROGMEM BooleanMenuInfo minfoOptionsSunscreenOptionsSunscreenReminder = { "Sunscreen Reminder", 5, 13, 1, NO_CALLBACK, NAMING_ON_OFF };
+const PROGMEM BooleanMenuInfo minfoOptionsSunscreenOptionsSunscreenReminder = { "Sunscreen Reminder", 5, 13, 1, onSunscreenReminderToggle, NAMING_ON_OFF };
 BooleanMenuItem menuOptionsSunscreenOptionsSunscreenReminder(&minfoOptionsSunscreenOptionsSunscreenReminder, false, &menuOptionsSunscreenOptionsSPFLevel, INFO_LOCATION_PGM);
 const PROGMEM SubMenuInfo minfoOptionsSunscreenOptions = { "Sunscreen", 4, 0xffff, 0, NO_CALLBACK };
 BackMenuItem menuBackOptionsSunscreenOptions(&minfoOptionsSunscreenOptions, &menuOptionsSunscreenOptionsSunscreenReminder, INFO_LOCATION_PGM);
@@ -45,27 +45,29 @@ BackMenuItem menuBackOptions(&minfoOptions, &menuOptionsSensitivityOptions, INFO
 SubMenuItem menuOptions(&minfoOptions, &menuBackOptions, nullptr, INFO_LOCATION_PGM);
 const PROGMEM AnyMenuInfo minfoBattery = { "Battery", 1, 4, 0, NO_CALLBACK };
 TextMenuItem menuBattery(&minfoBattery, "BATTERY%", 5, &menuOptions, INFO_LOCATION_PGM);
-const PROGMEM BooleanMenuInfo minfoDismissAlert = { "Dismiss Alert", 11, 0xffff, 1, NO_CALLBACK, NAMING_CHECKBOX };
+const PROGMEM BooleanMenuInfo minfoDismissAlert = { "Dismiss Alert", 11, 0xffff, 1, onDismissAlert, NAMING_CHECKBOX };
 BooleanMenuItem menuDismissAlert(&minfoDismissAlert, false, &menuBattery, INFO_LOCATION_PGM);
 const char enumStrActiveAlert_0[] PROGMEM = "None";
 const char enumStrActiveAlert_1[] PROGMEM = "UV Exposure";
 const char enumStrActiveAlert_2[] PROGMEM = "Ambient Light";
-const char* const enumStrActiveAlert[] PROGMEM  = { enumStrActiveAlert_0, enumStrActiveAlert_1, enumStrActiveAlert_2 };
-const PROGMEM EnumMenuInfo minfoActiveAlert = { "Active Alert", 12, 19, 2, NO_CALLBACK, enumStrActiveAlert };
+const char enumStrActiveAlert_3[] PROGMEM = "Reapply Sunscreen";
+const char* const enumStrActiveAlert[] PROGMEM  = { enumStrActiveAlert_0, enumStrActiveAlert_1, enumStrActiveAlert_2, enumStrActiveAlert_3 };
+const PROGMEM EnumMenuInfo minfoActiveAlert = { "Active Alert", 12, 19, 3, NO_CALLBACK, enumStrActiveAlert };
 EnumMenuItem menuActiveAlert(&minfoActiveAlert, 0, &menuDismissAlert, INFO_LOCATION_PGM);
-const PROGMEM AnalogMenuInfo minfoAmbientLight = { "Ambient Light", 13, 21, 65535, NO_CALLBACK, 0, 1, "" };
-AnalogMenuItem menuAmbientLight(&minfoAmbientLight, 0, &menuActiveAlert, INFO_LOCATION_PGM);
-const PROGMEM AnalogMenuInfo minfoCurrentUVIndex = { "Current UV Index", 9, 17, 11, NO_CALLBACK, 0, 1, " UVI" };
-AnalogMenuItem menuCurrentUVIndex(&minfoCurrentUVIndex, 0, &menuAmbientLight, INFO_LOCATION_PGM);
+const PROGMEM AnalogMenuInfo minfoMinUntilNextRmdr = { "Min Until Next Rmdr", 15, 0xffff, 3000, NO_CALLBACK, 0, 10, "" };
+AnalogMenuItem menuMinUntilNextRmdr(&minfoMinUntilNextRmdr, 0, &menuActiveAlert, INFO_LOCATION_PGM);
+const PROGMEM AnalogMenuInfo minfoCurrentUVIndex = { "Current UV Index", 9, 17, 110, NO_CALLBACK, 0, 10, "" };
+AnalogMenuItem menuCurrentUVIndex(&minfoCurrentUVIndex, 0, &menuMinUntilNextRmdr, INFO_LOCATION_PGM);
 
 void setupMenu() {
     // First we set up eeprom and authentication (if needed).
     setSizeBasedEEPROMStorageEnabled(true);
     // Now add any readonly, non-remote and visible flags.
-    menuCurrentUVIndex.setReadOnly(true);
-    menuBattery.setReadOnly(true);
     menuActiveAlert.setReadOnly(true);
-    menuAmbientLight.setReadOnly(true);
+    menuCurrentUVIndex.setReadOnly(true);
+    menuMinUntilNextRmdr.setReadOnly(true);
+    menuBattery.setReadOnly(true);
+    menuMinUntilNextRmdr.setVisible(false);
     menuOptionsSunscreenOptionsReminderInterval.setStep(10);
     menuOptionsSunscreenOptionsSPFLevel.setStep(10);
 

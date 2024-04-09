@@ -117,10 +117,6 @@ void loop()
 
     //check if sunscreen threshold has passed
     checkSunscreenReminderAlert();
-    if(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean())
-    {
-        menuMinUntilNextRmdr.setCurrentValue((nextSunscreenReminder-millis())/(100*60));
-    }
     //buzzer siren functionality
     if(menuActiveAlert.getCurrentValue()>0)
     {
@@ -193,7 +189,7 @@ bool buttonWasPressed(BUTTON button)
 }
 void D0ISR() 
 {
-    //menuActiveAlert.setCurrentValue(1); //test alert
+    menuActiveAlert.setCurrentValue(1); //test alert
     static unsigned long lastInterrupt = 0;
     unsigned long thisInterrupt = millis();
 
@@ -276,10 +272,4 @@ void CALLBACK_FUNCTION onDismissAlert(int id)
         noTone(16);
         menuDismissAlert.setBoolean(false);
     }
-}
-
-void CALLBACK_FUNCTION onSunscreenReminderToggle(int id) 
-{
-    menuMinUntilNextRmdr.setVisible(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean());
-    changeSunscreenInterval(menuOptionsSunscreenOptionsReminderInterval.getCurrentValue()+10);
 }

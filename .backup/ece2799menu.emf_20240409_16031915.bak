@@ -8,10 +8,10 @@
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
-        "maxValue": 11,
+        "maxValue": 110,
         "offset": 0,
-        "divisor": 1,
-        "unitName": " UVI",
+        "divisor": 10,
+        "unitName": "",
         "step": 1,
         "name": "Current UV Index",
         "variableName": "CurrentUVIndex",
@@ -28,18 +28,18 @@
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
-        "maxValue": 65535,
+        "maxValue": 300,
         "offset": 0,
         "divisor": 1,
         "unitName": "",
         "step": 1,
-        "name": "Ambient Light",
-        "variableName": "AmbientLight",
-        "id": 13,
-        "eepromAddress": 21,
+        "name": "Min Until Next Rmdr",
+        "variableName": "MinUntilNextRmdr",
+        "id": 15,
+        "eepromAddress": -1,
         "readOnly": true,
         "localOnly": false,
-        "visible": true,
+        "visible": false,
         "staticDataInRAM": false
       }
     },
@@ -51,7 +51,8 @@
         "enumEntries": [
           "None",
           "UV Exposure",
-          "Ambient Light"
+          "Ambient Light",
+          "Sunscreen Reapplication Reminder"
         ],
         "name": "Active Alert",
         "variableName": "ActiveAlert",
@@ -73,6 +74,7 @@
         "variableName": "DismissAlert",
         "id": 11,
         "eepromAddress": -1,
+        "functionName": "onDismissAlert",
         "readOnly": false,
         "localOnly": false,
         "visible": true,
@@ -156,6 +158,7 @@
         "variableName": "OptionsSunscreenOptionsSunscreenReminder",
         "id": 5,
         "eepromAddress": 13,
+        "functionName": "onSunscreenReminderToggle",
         "readOnly": false,
         "localOnly": false,
         "visible": true,
@@ -185,10 +188,10 @@
     {
       "parentId": 4,
       "type": "analogItem",
-      "defaultValue": "120",
+      "defaultValue": "110",
       "item": {
-        "maxValue": 300,
-        "offset": 0,
+        "maxValue": 290,
+        "offset": 10,
         "divisor": 1,
         "unitName": "min",
         "step": 10,
