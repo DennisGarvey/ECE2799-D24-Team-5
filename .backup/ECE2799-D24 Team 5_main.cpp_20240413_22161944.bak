@@ -37,43 +37,16 @@ void checkSunscreenReminderAlert();
 void checkUVAlert();
 void updateUVThreshold();
 void print_uint64_t(uint64_t num);
-void progressBar();
 
 void setup()
 {
     Serial.begin(115200);
-    
-    // -------Display---------
-    // turn on backlite
-    pinMode(TFT_BACKLITE, OUTPUT);
-    digitalWrite(TFT_BACKLITE, HIGH);
-    Serial.println("backlight turned on");
-    // turn on the TFT / I2C power supply
-    pinMode(TFT_I2C_POWER, OUTPUT);
-    digitalWrite(TFT_I2C_POWER, HIGH);
-    delay(10);
-    // initialize TFT
-    display.init(135, 240); // Init ST7789 240x135
-    display.setRotation(3);
-    display.fillScreen(ST77XX_BLACK);
 
-    display.setCursor(0,0);
-    display.setTextWrap(true);
-    display.setTextSize(1);
-    display.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
-    display.println("Diplay setup sucessfull!");
-    progressBar();
-
-
-    display.println("Setting up buzzer...");
     // buzzer pins
     pinMode(14, OUTPUT);
     pinMode(16, OUTPUT);
     digitalWrite(14, LOW);
-    display.println("Buzzer setup sucessfull!");
-    progressBar();
 
-    display.println("Setting up buttons...");
     // setup buttons inputs
     pinMode(D0, INPUT_PULLUP);
     pinMode(D1, INPUT_PULLDOWN);
@@ -82,32 +55,31 @@ void setup()
     attachInterrupt(digitalPinToInterrupt(D0), D0ISR, RISING);
     attachInterrupt(digitalPinToInterrupt(D1), D1ISR, FALLING);
     attachInterrupt(digitalPinToInterrupt(D2), D2ISR, FALLING);
-    display.println("Button setup sucessfull!");
-    progressBar();
 
-    display.println("Setting up battery monitor...");
     // battery monitor
     if (!batteryMonitor.begin())
     {
         Serial.println(F("Couldnt find Adafruit MAX17048"));
-        display.println("Couldnt find Adafruit MAX17048");
-        progressBar();
     }
-    else
-    {
-        display.println("Battery monitor setup sucessful!");
-        progressBar();
-    }
-    
+    // -------Display---------
+    // turn on backlite
+    pinMode(TFT_BACKLITE, OUTPUT);
+    digitalWrite(TFT_BACKLITE, HIGH);
 
-    
-    display.println("Setting up sensors...");
+    // turn on the TFT / I2C power supply
+    pinMode(TFT_I2C_POWER, OUTPUT);
+    digitalWrite(TFT_I2C_POWER, HIGH);
+    delay(10);
+    // initialize TFT
+    display.init(135, 240); // Init ST7789 240x135
+    display.setRotation(3);
+    display.fillScreen(ST77XX_BLACK);
+    Serial.println(F("Display Initialized Sucessfully"));
+
     // i2c multiplexer
     Wire.begin();
     mux.begin();
     mux.setPort(0);
-    display.println("Mulitplexer online!");
-    progressBar();
     // init sensors
     for (int i = 0; i < 3; i++)
     {
@@ -116,29 +88,15 @@ void setup()
         sensor[i].begin();
         sensor[i].setGain(LTR390_GAIN_18);
         sensor[i].setResolution(LTR390_RESOLUTION_20BIT);
-        display.printf("Sensor %d online!\n", i);
-        progressBar();
     }
-    display.println("Sensor setup sucessful!");
-    progressBar();
 
     // WIFI AND TIME
     // WiFi.mode(WIFI_STA);
     // WiFi.begin(WLAN_SSID, WLAN_PASSWORD);
     // configTime(GMTOFFSET, DSTOFFSET_SECONDS, NTPSERVER);
 
-    display.println("Entering menu!");
-    progressBar();
     setupMenu();
     updateUVThreshold();
-}
-
-void progressBar()
-{
-    static unsigned int progress = 0;
-    progress++;
-
-    display.fillRect(10, 110, progress*(240.0/11), 15, ST77XX_BLUE);
 }
 void loop()
 {
@@ -406,11 +364,4 @@ void print_uint64_t(uint64_t num)
     {
         Serial.print(*p--);
     }
-}
-
-
-
-void CALLBACK_FUNCTION onTurnOff(int id) 
-{
-    esp_deep_sleep_start();
 }

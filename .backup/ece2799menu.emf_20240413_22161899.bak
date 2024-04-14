@@ -121,10 +121,10 @@
         "maxValue": 5,
         "offset": 1,
         "divisor": 1,
-        "unitName": "Unit",
+        "unitName": "",
         "step": 1,
         "name": "Fitzpatrick Type",
-        "variableName": "OptionsFits",
+        "variableName": "OptionsFitzpatrickType",
         "id": 16,
         "eepromAddress": -1,
         "functionName": "onFitzpatrickValueUpdate",
@@ -151,23 +151,6 @@
     },
     {
       "parentId": 4,
-      "type": "boolItem",
-      "defaultValue": "false",
-      "item": {
-        "naming": "ON_OFF",
-        "name": "Sunscreen Reminder",
-        "variableName": "OptionsSunscreenOptionsSunscreenReminder",
-        "id": 5,
-        "eepromAddress": 13,
-        "functionName": "onSunscreenReminderToggle",
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 4,
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
@@ -180,6 +163,24 @@
         "variableName": "OptionsSunscreenOptionsSPFLevel",
         "id": 6,
         "eepromAddress": 14,
+        "functionName": "onSPFUpdate",
+        "readOnly": false,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 4,
+      "type": "boolItem",
+      "defaultValue": "false",
+      "item": {
+        "naming": "ON_OFF",
+        "name": "Sunscreen Reminder",
+        "variableName": "OptionsSunscreenOptionsSunscreenReminder",
+        "id": 5,
+        "eepromAddress": 13,
+        "functionName": "onSunscreenReminderToggle",
         "readOnly": false,
         "localOnly": false,
         "visible": true,
@@ -232,6 +233,36 @@
         "variableName": "OptionsAmbientLightOptionsAlerts",
         "id": 8,
         "eepromAddress": 16,
+        "readOnly": false,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 2,
+      "type": "boolItem",
+      "defaultValue": "false",
+      "item": {
+        "naming": "ON_OFF",
+        "name": "Demo Mode",
+        "variableName": "OptionsDemoMode",
+        "id": 17,
+        "eepromAddress": -1,
+        "readOnly": false,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "actionMenu",
+      "item": {
+        "name": "Turn Off",
+        "variableName": "TurnOff",
+        "id": 18,
+        "eepromAddress": -1,
         "readOnly": false,
         "localOnly": false,
         "visible": true,

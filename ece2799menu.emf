@@ -254,6 +254,21 @@
         "visible": true,
         "staticDataInRAM": false
       }
+    },
+    {
+      "parentId": 0,
+      "type": "actionMenu",
+      "item": {
+        "name": "Turn Off",
+        "variableName": "TurnOff",
+        "id": 18,
+        "eepromAddress": -1,
+        "functionName": "onTurnOff",
+        "readOnly": false,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
     }
   ],
   "codeOptions": {

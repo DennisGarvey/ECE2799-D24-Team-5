@@ -20,6 +20,8 @@ AdafruitDrawable gfxDrawable(&gfx, 0);
 GraphicsDeviceRenderer renderer(30, applicationInfo.name, &gfxDrawable);
 
 // Global Menu Item declarations
+const PROGMEM AnyMenuInfo minfoTurnOff = { "Turn Off", 18, 0xffff, 0, onTurnOff };
+ActionMenuItem menuTurnOff(&minfoTurnOff, nullptr, INFO_LOCATION_PGM);
 const PROGMEM BooleanMenuInfo minfoOptionsDemoMode = { "Demo Mode", 17, 0xffff, 1, NO_CALLBACK, NAMING_ON_OFF };
 BooleanMenuItem menuOptionsDemoMode(&minfoOptionsDemoMode, false, nullptr, INFO_LOCATION_PGM);
 const PROGMEM BooleanMenuInfo minfoOptionsAmbientLightOptionsAlerts = { "Alerts", 8, 16, 1, NO_CALLBACK, NAMING_YES_NO };
@@ -40,7 +42,7 @@ const PROGMEM AnalogMenuInfo minfoOptionsFitzpatrickType = { "Fitzpatrick Type",
 AnalogMenuItem menuOptionsFitzpatrickType(&minfoOptionsFitzpatrickType, 0, &menuOptionsSunscreenOptions, INFO_LOCATION_PGM);
 const PROGMEM SubMenuInfo minfoOptions = { "Options", 2, 0xffff, 0, NO_CALLBACK };
 BackMenuItem menuBackOptions(&minfoOptions, &menuOptionsFitzpatrickType, INFO_LOCATION_PGM);
-SubMenuItem menuOptions(&minfoOptions, &menuBackOptions, nullptr, INFO_LOCATION_PGM);
+SubMenuItem menuOptions(&minfoOptions, &menuBackOptions, &menuTurnOff, INFO_LOCATION_PGM);
 const PROGMEM AnyMenuInfo minfoBattery = { "Battery", 1, 4, 0, NO_CALLBACK };
 TextMenuItem menuBattery(&minfoBattery, "BATTERY%", 5, &menuOptions, INFO_LOCATION_PGM);
 const PROGMEM BooleanMenuInfo minfoDismissAlert = { "Dismiss Alert", 11, 0xffff, 1, onDismissAlert, NAMING_CHECKBOX };

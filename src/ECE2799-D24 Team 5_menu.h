@@ -28,6 +28,7 @@ extern GraphicsDeviceRenderer renderer;
 
 
 // Global Menu Item exports
+extern ActionMenuItem menuTurnOff;
 extern BooleanMenuItem menuOptionsDemoMode;
 extern BooleanMenuItem menuOptionsAmbientLightOptionsAlerts;
 extern BackMenuItem menuBackOptionsAmbientLightOptions;
@@ -58,5 +59,6 @@ void CALLBACK_FUNCTION onFitzpatrickValueUpdate(int id);
 void CALLBACK_FUNCTION onSPFUpdate(int id);
 void CALLBACK_FUNCTION onSunscreenReminderToggle(int id);
 void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id);
+void CALLBACK_FUNCTION onTurnOff(int id);
 
 #endif // MENU_GENERATED_CODE_H
