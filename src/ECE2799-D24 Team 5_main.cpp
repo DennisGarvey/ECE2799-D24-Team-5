@@ -159,7 +159,7 @@ void progressBar()
     static unsigned int progress = 0;
     progress++;
 
-    display.fillRect(10, 110, progress*(240.0/11), 15, ST77XX_BLUE);
+    display.fillRect(0, 110, progress*(240.0/9), 15, ST77XX_BLUE);
 }
 void loop()
 {
