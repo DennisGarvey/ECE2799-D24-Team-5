@@ -52,7 +52,7 @@
           "None",
           "UV Exposure",
           "Ambient Light",
-          "Sunscreen Reapplication Reminder"
+          "Reapp Snscrn"
         ],
         "name": "Active Alert",
         "variableName": "ActiveAlert",
@@ -115,18 +115,19 @@
     },
     {
       "parentId": 2,
-      "type": "enumItem",
-      "defaultValue": "1",
+      "type": "analogItem",
+      "defaultValue": "0",
       "item": {
-        "enumEntries": [
-          "Low",
-          "Medium",
-          "High"
-        ],
-        "name": "Sensitivity",
-        "variableName": "OptionsSensitivityOptions",
-        "id": 3,
-        "eepromAddress": 11,
+        "maxValue": 5,
+        "offset": 1,
+        "divisor": 1,
+        "unitName": "",
+        "step": 1,
+        "name": "Fitzpatrick Skin Type",
+        "variableName": "OptionsFits",
+        "id": 16,
+        "eepromAddress": -1,
+        "functionName": "onFitzpatrickValueUpdate",
         "readOnly": false,
         "localOnly": false,
         "visible": true,

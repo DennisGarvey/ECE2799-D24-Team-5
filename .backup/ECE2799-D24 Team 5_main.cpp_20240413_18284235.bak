@@ -26,6 +26,9 @@ unsigned long UVCount[3];
 unsigned long ALSCount[3];
 
 unsigned long nextSunscreenReminder = -1; 
+unsigned long lastSensorData = 0;
+uint64_t accumlutedUVCount = 0; //unit of "Count Seconds"
+uint64_t accumulatedUVThreshold = -1;
 
 void D0ISR();
 void D1ISR();
@@ -37,6 +40,7 @@ void refreshSensorData();
 void onNewData();
 void changeSunscreenInterval(int minutes);
 void checkSunscreenReminderAlert();
+void updateUVThreshold();
 
 void setup()
 {
@@ -117,6 +121,10 @@ void loop()
 
     //check if sunscreen threshold has passed
     checkSunscreenReminderAlert();
+    if(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean()) //update next reminder on main menu
+    {
+        menuMinUntilNextRmdr.setCurrentValue((nextSunscreenReminder-millis())/(100*60));
+    }
     //buzzer siren functionality
     if(menuActiveAlert.getCurrentValue()>0)
     {
@@ -159,6 +167,7 @@ void refreshSensorData()
             sensor[i].setMode(LTR390_MODE_UVS);
             UVCount[i]=sensor[i].readUVS();
             onNewData();
+            lastSensorData = millis();
         }
     }
 }
@@ -179,7 +188,6 @@ void onNewData()
     }
     double UVI = maxUVCount/2300.0;
     menuCurrentUVIndex.setCurrentValue((uint16_t) (UVI*10));
-    menuAmbientLight.setCurrentValue((uint16_t) maxALSCount);
 }
 
 bool buttonWasPressed(BUTTON button)
@@ -190,7 +198,7 @@ bool buttonWasPressed(BUTTON button)
 }
 void D0ISR() 
 {
-    menuActiveAlert.setCurrentValue(1); //test alert
+    //menuActiveAlert.setCurrentValue(1); //test alert
     static unsigned long lastInterrupt = 0;
     unsigned long thisInterrupt = millis();
 
@@ -239,6 +247,7 @@ void sendStatusOverSerial()
     Serial.printf("Batt Percent: %.1f%%\n", batteryMonitor.cellPercent());
     Serial.printf("Batt Chg Rate: %f%%/hr\n", batteryMonitor.chargeRate());
     Serial.printf("Wifi Status: %d\n", WiFi.status());
+    Serial.printf("Last Sensor Datapoint: %lu, delta: %lu\n", lastSensorData, millis()-lastSensorData);
     Serial.printf("UVCount Data: %d %d %d\n", UVCount[0], UVCount[1], UVCount[2]);
     Serial.printf("UVI Data: %lf %lf %lf\n", UVCount[0]/2300.0, UVCount[1]/2300.0, UVCount[2]/2300.0);
     Serial.printf("ALSCount Data: %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2]);
@@ -273,4 +282,25 @@ void CALLBACK_FUNCTION onDismissAlert(int id)
         noTone(16);
         menuDismissAlert.setBoolean(false);
     }
+}
+
+void CALLBACK_FUNCTION onSunscreenReminderToggle(int id) 
+{
+    menuMinUntilNextRmdr.setVisible(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean());
+    changeSunscreenInterval(menuOptionsSunscreenOptionsReminderInterval.getCurrentValue()+10);
+}
+
+void updateUVThreshold()
+{
+
+}
+
+void CALLBACK_FUNCTION onFitzpatrickValueUpdate(int id) {
+    updateUVThreshold();
+}
+
+
+
+void CALLBACK_FUNCTION onSPFUpdate(int id) {
+    updateUVThreshold();
 }

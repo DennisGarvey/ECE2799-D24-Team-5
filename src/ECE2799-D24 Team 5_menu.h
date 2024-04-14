@@ -28,15 +28,16 @@ extern GraphicsDeviceRenderer renderer;
 
 
 // Global Menu Item exports
+extern BooleanMenuItem menuOptionsDemoMode;
 extern BooleanMenuItem menuOptionsAmbientLightOptionsAlerts;
 extern BackMenuItem menuBackOptionsAmbientLightOptions;
 extern SubMenuItem menuOptionsAmbientLightOptions;
 extern AnalogMenuItem menuOptionsSunscreenOptionsReminderInterval;
-extern AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel;
 extern BooleanMenuItem menuOptionsSunscreenOptionsSunscreenReminder;
+extern AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel;
 extern BackMenuItem menuBackOptionsSunscreenOptions;
 extern SubMenuItem menuOptionsSunscreenOptions;
-extern EnumMenuItem menuOptionsSensitivityOptions;
+extern AnalogMenuItem menuOptionsFitzpatrickType;
 extern BackMenuItem menuBackOptions;
 extern SubMenuItem menuOptions;
 extern TextMenuItem menuBattery;
@@ -53,6 +54,8 @@ void setupMenu();
 #define CALLBACK_FUNCTION
 
 void CALLBACK_FUNCTION onDismissAlert(int id);
+void CALLBACK_FUNCTION onFitzpatrickValueUpdate(int id);
+void CALLBACK_FUNCTION onSPFUpdate(int id);
 void CALLBACK_FUNCTION onSunscreenReminderToggle(int id);
 void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id);
 

@@ -26,6 +26,7 @@ unsigned long UVCount[3];
 unsigned long ALSCount[3];
 
 unsigned long nextSunscreenReminder = -1; 
+unsigned long lastSensorData = 0;
 
 void D0ISR();
 void D1ISR();
@@ -117,6 +118,10 @@ void loop()
 
     //check if sunscreen threshold has passed
     checkSunscreenReminderAlert();
+    if(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean()) //update next reminder on main menu
+    {
+        menuMinUntilNextRmdr.setCurrentValue((nextSunscreenReminder-millis())/(100*60));
+    }
     //buzzer siren functionality
     if(menuActiveAlert.getCurrentValue()>0)
     {
@@ -159,6 +164,7 @@ void refreshSensorData()
             sensor[i].setMode(LTR390_MODE_UVS);
             UVCount[i]=sensor[i].readUVS();
             onNewData();
+            lastSensorData = millis();
         }
     }
 }
@@ -179,7 +185,6 @@ void onNewData()
     }
     double UVI = maxUVCount/2300.0;
     menuCurrentUVIndex.setCurrentValue((uint16_t) (UVI*10));
-    menuAmbientLight.setCurrentValue((uint16_t) maxALSCount);
 }
 
 bool buttonWasPressed(BUTTON button)
@@ -190,7 +195,7 @@ bool buttonWasPressed(BUTTON button)
 }
 void D0ISR() 
 {
-    menuActiveAlert.setCurrentValue(1); //test alert
+    //menuActiveAlert.setCurrentValue(1); //test alert
     static unsigned long lastInterrupt = 0;
     unsigned long thisInterrupt = millis();
 
@@ -275,8 +280,14 @@ void CALLBACK_FUNCTION onDismissAlert(int id)
     }
 }
 
+void CALLBACK_FUNCTION onSunscreenReminderToggle(int id) 
+{
+    menuMinUntilNextRmdr.setVisible(menuOptionsSunscreenOptionsSunscreenReminder.getBoolean());
+    changeSunscreenInterval(menuOptionsSunscreenOptionsReminderInterval.getCurrentValue()+10);
+}
 
 
-void CALLBACK_FUNCTION onSunscreenReminderToggle(int id) {
+
+void CALLBACK_FUNCTION onFitzpatrickValueUpdate(int id) {
     // TODO - your menu change code
 }
