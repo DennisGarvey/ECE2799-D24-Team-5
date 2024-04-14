@@ -10,7 +10,7 @@
 
 #include <tcMenu.h>
 #include "ECE2799-D24 Team 5_menu.h"
-#include "ThemeCoolBlueTraditional.h"
+#include "ThemeDarkModeTraditional.h"
 
 // Global variable declarations
 const PROGMEM  ConnectorLocalInfo applicationInfo = { "Personal Light Monitor", "daba275b-c0d1-4690-906c-7184f572ebaa" };
@@ -82,6 +82,6 @@ void setupMenu() {
     menuMgr.initForUpDownOk(&renderer, &menuCurrentUVIndex, 2, 17, 1, 20);
     renderer.setTitleMode(BaseGraphicalRenderer::TITLE_FIRST_ROW);
     renderer.setUseSliderForAnalog(true);
-    installCoolBlueTraditionalTheme(renderer, MenuFontDef(nullptr, 1), MenuFontDef(nullptr, 1), false);
+    installDarkModeTraditionalTheme(renderer, MenuFontDef(nullptr, 1), MenuFontDef(nullptr, 1), false);
 }
 
