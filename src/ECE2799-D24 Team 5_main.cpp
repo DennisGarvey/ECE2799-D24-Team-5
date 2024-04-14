@@ -104,20 +104,41 @@ void setup()
     display.println("Setting up sensors...");
     // i2c multiplexer
     Wire.begin();
-    mux.begin();
+    if(mux.begin())
+        display.println("Mulitplexer online!");
+    else
+    {
+        display.println("MUX SETUP FAILED");
+        display.drawRect(0, 0, 240, 135, ST77XX_RED);
+        tone(16, 250);
+        unsigned long error = millis();
+        while(millis()<error+1000*10);
+        esp_deep_sleep_start();
+    }
+    
     mux.setPort(0);
-    display.println("Mulitplexer online!");
     progressBar();
     // init sensors
     for (int i = 0; i < 3; i++)
     {
         mux.setPort(i);
         sensor[i] = Adafruit_LTR390();
-        sensor[i].begin();
-        sensor[i].setGain(LTR390_GAIN_18);
-        sensor[i].setResolution(LTR390_RESOLUTION_20BIT);
-        display.printf("Sensor %d online!\n", i);
-        progressBar();
+        if(sensor[i].begin())
+        {
+            sensor[i].setGain(LTR390_GAIN_18);
+            sensor[i].setResolution(LTR390_RESOLUTION_20BIT);
+            display.printf("Sensor %d online!\n", i);
+            progressBar();
+        }
+        else
+        {
+            display.printf("SENSOR %d SETUP FAILED", i);
+            display.drawRect(0, 0, 240, 135, ST77XX_RED);
+            tone(16, 250);
+            unsigned long error = millis();
+            while(millis()<error+1000*10);
+            esp_deep_sleep_start();
+        }
     }
     display.println("Sensor setup sucessful!");
     progressBar();
