@@ -181,10 +181,7 @@ void loop()
 
     //uv limit menu update
     double percentAccumulated = ((double)accumlutedUVCount)/accumulatedUVThreshold*100;
-    if(percentAccumulated<100)
-        menuOfUVLimit.setCurrentValue(percentAccumulated*100);
-    else
-        menuOfUVLimit.setCurrentValue(100*100);
+    menuOfUVLimit.setCurrentValue(percentAccumulated*100);
 
     // menu loop
     taskManager.runLoop();

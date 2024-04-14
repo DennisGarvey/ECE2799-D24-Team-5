@@ -181,10 +181,7 @@ void loop()
 
     //uv limit menu update
     double percentAccumulated = ((double)accumlutedUVCount)/accumulatedUVThreshold*100;
-    if(percentAccumulated<100)
-        menuOfUVLimit.setCurrentValue(percentAccumulated*100);
-    else
-        menuOfUVLimit.setCurrentValue(100*100);
+    menuOfUVLimit.setCurrentValue(percentAccumulated*100);
 
     // menu loop
     taskManager.runLoop();
@@ -441,4 +438,9 @@ void print_uint64_t(uint64_t num)
 void CALLBACK_FUNCTION onTurnOff(int id) 
 {
     esp_deep_sleep_start();
+}
+
+
+void CALLBACK_FUNCTION onSelectActiveAlert(int id) {
+    menuDismissAlert.setBoolean(true);
 }

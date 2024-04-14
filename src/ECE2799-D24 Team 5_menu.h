@@ -45,6 +45,7 @@ extern TextMenuItem menuBattery;
 extern BooleanMenuItem menuDismissAlert;
 extern EnumMenuItem menuActiveAlert;
 extern AnalogMenuItem menuMinUntilNextRmdr;
+extern AnalogMenuItem menuOfUVLimit;
 extern AnalogMenuItem menuCurrentUVIndex;
 
 // Provide a wrapper to get hold of the root menu item and export setupMenu

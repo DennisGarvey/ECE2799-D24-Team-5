@@ -56,8 +56,10 @@ const PROGMEM EnumMenuInfo minfoActiveAlert = { "Active Alert", 12, 19, 3, NO_CA
 EnumMenuItem menuActiveAlert(&minfoActiveAlert, 0, &menuDismissAlert, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoMinUntilNextRmdr = { "Min Until Next Rmdr", 15, 0xffff, 3000, NO_CALLBACK, 0, 10, "" };
 AnalogMenuItem menuMinUntilNextRmdr(&minfoMinUntilNextRmdr, 0, &menuActiveAlert, INFO_LOCATION_PGM);
+const PROGMEM AnalogMenuInfo minfoOfUVLimit = { "% of UV Limit", 19, 0xffff, 10000, NO_CALLBACK, 0, 100, "%" };
+AnalogMenuItem menuOfUVLimit(&minfoOfUVLimit, 0, &menuMinUntilNextRmdr, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoCurrentUVIndex = { "Current UV Index", 9, 17, 110, NO_CALLBACK, 0, 10, "" };
-AnalogMenuItem menuCurrentUVIndex(&minfoCurrentUVIndex, 0, &menuMinUntilNextRmdr, INFO_LOCATION_PGM);
+AnalogMenuItem menuCurrentUVIndex(&minfoCurrentUVIndex, 0, &menuOfUVLimit, INFO_LOCATION_PGM);
 
 void setupMenu() {
     // First we set up eeprom and authentication (if needed).
@@ -66,6 +68,7 @@ void setupMenu() {
     menuCurrentUVIndex.setReadOnly(true);
     menuMinUntilNextRmdr.setReadOnly(true);
     menuActiveAlert.setReadOnly(true);
+    menuOfUVLimit.setReadOnly(true);
     menuBattery.setReadOnly(true);
     menuMinUntilNextRmdr.setVisible(false);
     menuOptionsSunscreenOptionsSPFLevel.setStep(10);

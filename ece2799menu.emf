@@ -28,6 +28,26 @@
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
+        "maxValue": 10000,
+        "offset": 0,
+        "divisor": 100,
+        "unitName": "%",
+        "step": 1,
+        "name": "% of UV Limit",
+        "variableName": "OfUVLimit",
+        "id": 19,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "analogItem",
+      "defaultValue": "0",
+      "item": {
         "maxValue": 3000,
         "offset": 0,
         "divisor": 10,
