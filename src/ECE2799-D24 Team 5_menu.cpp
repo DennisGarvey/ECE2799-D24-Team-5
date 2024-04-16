@@ -13,7 +13,7 @@
 #include "ThemeDarkModeTraditional.h"
 
 // Global variable declarations
-const PROGMEM  ConnectorLocalInfo applicationInfo = { "Personal Light Monitor", "daba275b-c0d1-4690-906c-7184f572ebaa" };
+const PROGMEM  ConnectorLocalInfo applicationInfo = { "SunSentinel", "daba275b-c0d1-4690-906c-7184f572ebaa" };
 
 Adafruit_ST7789 gfx(42, 40, 35, 36, 41);
 AdafruitDrawable gfxDrawable(&gfx, 0);

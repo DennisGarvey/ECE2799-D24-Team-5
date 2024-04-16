@@ -165,8 +165,12 @@ void progressBar()
 }
 void loop()
 {
-    if (millis() % 100 == 0)
+    static unsigned long lastStatus = 0;
+    if(millis()-lastStatus>100)
+    {
         sendStatusOverSerial();
+        lastStatus = millis();
+    }
     
     refreshSensorData();
     checkUVAlert();
@@ -223,6 +227,10 @@ void refreshSensorData()
                 UVCount[i] = sensor[i].readUVS();
             else if(currentSensorMode == LTR390_MODE_ALS)
                 ALSCount[i] = sensor[i].readALS();
+            if(UVCount[i]==-1)
+                UVCount[i] = 0;
+            if(ALSCount[i]==-1)
+                ALSCount[i] = 0;
             onNewData();
             lastSensorData = millis();
         }
@@ -299,9 +307,9 @@ void sendStatusOverSerial()
     Serial.println("---------------------------------");
     if(menuOptionsDemoMode.getBoolean())
         Serial.printf(":::::DEMO MODE ACTIVE:::::\n");
-    Serial.print("Program Time: ");
-    Serial.print(millis());
-    Serial.println("ms");
+    static unsigned long lastStatus = 0;
+    Serial.printf("Program Time: %lums (delta: %lums)\n", millis(), millis()-lastStatus);
+    lastStatus = millis();
     // struct tm timeinfo;
     // if(!getLocalTime(&timeinfo))
     //     Serial.println("Failed to obtain time");

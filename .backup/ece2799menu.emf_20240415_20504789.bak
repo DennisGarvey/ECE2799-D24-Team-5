@@ -28,6 +28,26 @@
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
+        "maxValue": 10000,
+        "offset": 0,
+        "divisor": 100,
+        "unitName": "%",
+        "step": 1,
+        "name": "% of UV Limit",
+        "variableName": "OfUVLimit",
+        "id": 19,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "analogItem",
+      "defaultValue": "0",
+      "item": {
         "maxValue": 3000,
         "offset": 0,
         "divisor": 10,
@@ -278,9 +298,9 @@
     "lastRemoteUuids": [
       "2c101fec-1f7d-4ff3-8d2b-992ad41e7fcb"
     ],
-    "lastThemeUuid": "03c6b25f-db63-402a-8447-a5ce1484c14d",
+    "lastThemeUuid": "e4524028-edd8-4e0a-ae15-a1f2ba05354f",
     "applicationUUID": "daba275b-c0d1-4690-906c-7184f572ebaa",
-    "applicationName": "Personal Light Monitor",
+    "applicationName": "SunSent",
     "lastProperties": [
       {
         "name": "DISPLAY_VARIABLE",

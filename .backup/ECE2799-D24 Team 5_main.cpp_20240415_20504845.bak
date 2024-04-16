@@ -19,6 +19,7 @@ QWIICMUX mux;
 Adafruit_LTR390 sensor[3];
 unsigned long UVCount[3];
 unsigned long ALSCount[3];
+ltr390_mode_t currentSensorMode;
 
 unsigned long nextSunscreenReminder = -1;
 unsigned long lastSensorData = 0;
@@ -119,6 +120,7 @@ void setup()
     mux.setPort(0);
     progressBar();
     // init sensors
+    currentSensorMode = LTR390_MODE_UVS;
     for (int i = 0; i < 3; i++)
     {
         mux.setPort(i);
@@ -179,6 +181,13 @@ void loop()
     dtostrf(batteryMonitor.cellPercent(), 1, 1, buffer);
     menuBattery.setTextValue(buffer);
 
+    //uv limit menu update
+    double percentAccumulated = ((double)accumlutedUVCount)/accumulatedUVThreshold*100;
+    if(percentAccumulated<100)
+        menuOfUVLimit.setCurrentValue(percentAccumulated*100);
+    else
+        menuOfUVLimit.setCurrentValue(100*100);
+
     // menu loop
     taskManager.runLoop();
 
@@ -209,10 +218,11 @@ void refreshSensorData()
         mux.setPort(i);
         if (sensor[i].newDataAvailable())
         {
-            // sensor[i].setMode(LTR390_MODE_ALS);
-            // ALSCount[i]=sensor[i].readALS();
-            sensor[i].setMode(LTR390_MODE_UVS);
-            UVCount[i] = sensor[i].readUVS();
+            sensor[i].setMode(currentSensorMode);
+            if(currentSensorMode == LTR390_MODE_UVS)
+                UVCount[i] = sensor[i].readUVS();
+            else if(currentSensorMode == LTR390_MODE_ALS)
+                ALSCount[i] = sensor[i].readALS();
             onNewData();
             lastSensorData = millis();
         }
