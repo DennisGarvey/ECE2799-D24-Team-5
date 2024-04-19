@@ -40,8 +40,13 @@ BackMenuItem menuBackOptionsSunscreenOptions(&minfoOptionsSunscreenOptions, &men
 SubMenuItem menuOptionsSunscreenOptions(&minfoOptionsSunscreenOptions, &menuBackOptionsSunscreenOptions, &menuOptionsAmbientLightOptions, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoOptionsFitzpatrickType = { "Fitzpatrick Type", 16, 0xffff, 5, onFitzpatrickValueUpdate, 1, 1, "" };
 AnalogMenuItem menuOptionsFitzpatrickType(&minfoOptionsFitzpatrickType, 0, &menuOptionsSunscreenOptions, INFO_LOCATION_PGM);
+const char enumStrOptionsOperationalMode_0[] PROGMEM = "UV";
+const char enumStrOptionsOperationalMode_1[] PROGMEM = "Ambient Light";
+const char* const enumStrOptionsOperationalMode[] PROGMEM  = { enumStrOptionsOperationalMode_0, enumStrOptionsOperationalMode_1 };
+const PROGMEM EnumMenuInfo minfoOptionsOperationalMode = { "Operational Mode", 20, 0xffff, 1, onModeChange, enumStrOptionsOperationalMode };
+EnumMenuItem menuOptionsOperationalMode(&minfoOptionsOperationalMode, 0, &menuOptionsFitzpatrickType, INFO_LOCATION_PGM);
 const PROGMEM SubMenuInfo minfoOptions = { "Options", 2, 0xffff, 0, NO_CALLBACK };
-BackMenuItem menuBackOptions(&minfoOptions, &menuOptionsFitzpatrickType, INFO_LOCATION_PGM);
+BackMenuItem menuBackOptions(&minfoOptions, &menuOptionsOperationalMode, INFO_LOCATION_PGM);
 SubMenuItem menuOptions(&minfoOptions, &menuBackOptions, &menuTurnOff, INFO_LOCATION_PGM);
 const PROGMEM AnyMenuInfo minfoBattery = { "Battery", 1, 4, 0, NO_CALLBACK };
 TextMenuItem menuBattery(&minfoBattery, "BATTERY%", 5, &menuOptions, INFO_LOCATION_PGM);
@@ -56,8 +61,16 @@ const PROGMEM EnumMenuInfo minfoActiveAlert = { "Active Alert", 12, 19, 3, NO_CA
 EnumMenuItem menuActiveAlert(&minfoActiveAlert, 0, &menuDismissAlert, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoMinUntilNextRmdr = { "Min Until Next Rmdr", 15, 0xffff, 3000, NO_CALLBACK, 0, 10, "" };
 AnalogMenuItem menuMinUntilNextRmdr(&minfoMinUntilNextRmdr, 0, &menuActiveAlert, INFO_LOCATION_PGM);
+const char enumStrLuxRecommendation_0[] PROGMEM = "Ideal for Sleeping";
+const char enumStrLuxRecommendation_1[] PROGMEM = "Ideal Before Bed";
+const char enumStrLuxRecommendation_2[] PROGMEM = "Not Ideal at Night";
+const char* const enumStrLuxRecommendation[] PROGMEM  = { enumStrLuxRecommendation_0, enumStrLuxRecommendation_1, enumStrLuxRecommendation_2 };
+const PROGMEM EnumMenuInfo minfoLuxRecommendation = { "Lux Recommendation", 22, 0xffff, 2, NO_CALLBACK, enumStrLuxRecommendation };
+EnumMenuItem menuLuxRecommendation(&minfoLuxRecommendation, 0, &menuMinUntilNextRmdr, INFO_LOCATION_PGM);
+const PROGMEM FloatMenuInfo minfoLux = { "Lux", 21, 0xffff, 2, NO_CALLBACK };
+FloatMenuItem menuLux(&minfoLux, 0.0, &menuLuxRecommendation, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoOfUVLimit = { "% of UV Limit", 19, 0xffff, 10000, NO_CALLBACK, 0, 100, "%" };
-AnalogMenuItem menuOfUVLimit(&minfoOfUVLimit, 0, &menuMinUntilNextRmdr, INFO_LOCATION_PGM);
+AnalogMenuItem menuOfUVLimit(&minfoOfUVLimit, 0, &menuLux, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoCurrentUVIndex = { "Current UV Index", 9, 17, 110, NO_CALLBACK, 0, 10, "" };
 AnalogMenuItem menuCurrentUVIndex(&minfoCurrentUVIndex, 0, &menuOfUVLimit, INFO_LOCATION_PGM);
 
@@ -67,10 +80,14 @@ void setupMenu() {
     // Now add any readonly, non-remote and visible flags.
     menuCurrentUVIndex.setReadOnly(true);
     menuMinUntilNextRmdr.setReadOnly(true);
+    menuLux.setReadOnly(true);
     menuActiveAlert.setReadOnly(true);
     menuOfUVLimit.setReadOnly(true);
+    menuLuxRecommendation.setReadOnly(true);
     menuBattery.setReadOnly(true);
     menuMinUntilNextRmdr.setVisible(false);
+    menuLux.setVisible(false);
+    menuLuxRecommendation.setVisible(false);
     menuOptionsSunscreenOptionsSPFLevel.setStep(10);
     menuOptionsSunscreenOptionsReminderInterval.setStep(10);
 

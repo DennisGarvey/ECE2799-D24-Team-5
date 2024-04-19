@@ -252,6 +252,7 @@ void onNewData()
             maxALSCount = ALSCount[i];
     }
     double UVI = maxUVCount / 2300.0;
+    double LUX = (0.6*maxALSCount)/(18*4);
 
     unsigned long deltaT = millis()-lastSensorData;
 
@@ -259,6 +260,13 @@ void onNewData()
         maxUVCount *= 100;
     accumlutedUVCount += (deltaT/1000.0)* maxUVCount;
     menuCurrentUVIndex.setCurrentValue((uint16_t)(UVI * 10));
+    menuLux.setFloatValue(LUX);
+    if(LUX>50.0)
+        menuLuxRecommendation.setCurrentValue(2);
+    else if(LUX>5.0)
+        menuLuxRecommendation.setCurrentValue(1);
+    else if(LUX<=5.0)
+        menuLuxRecommendation.setCurrentValue(0);
 }
 
 bool buttonWasPressed(BUTTON button)
@@ -320,10 +328,11 @@ void sendStatusOverSerial()
     Serial.printf("Batt Percent: %.1f%%\n", batteryMonitor.cellPercent());
     Serial.printf("Batt Chg Rate: %f%%/hr\n", batteryMonitor.chargeRate());
     Serial.printf("Wifi Status: %d\n", WiFi.status());
-    Serial.printf("Last Sensor Datapoint: %lu, delta: %lu\n", lastSensorData, millis() - lastSensorData);
+    Serial.printf("Last Sensor Datapoint: %lums (delta: %lums)\n", lastSensorData, millis() - lastSensorData);
     Serial.printf("UVCount Data: %d %d %d\n", UVCount[0], UVCount[1], UVCount[2]);
     Serial.printf("UVI Data: %lf %lf %lf\n", UVCount[0] / 2300.0, UVCount[1] / 2300.0, UVCount[2] / 2300.0);
     Serial.printf("ALSCount Data: %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2]);
+    Serial.printf("LUX Data: %lf %lf %lf\n", (0.6*ALSCount[0])/(18*4), (0.6*ALSCount[1])/(18*4), (0.6*ALSCount[2])/(18*4));
     Serial.printf("UV Accumulation Threshold: ");
     print_uint64_t(accumulatedUVThreshold);
     Serial.printf("\nAccumulated UV (count seconds): ");
@@ -452,4 +461,27 @@ void print_uint64_t(uint64_t num)
 void CALLBACK_FUNCTION onTurnOff(int id) 
 {
     esp_deep_sleep_start();
+}
+
+
+
+void CALLBACK_FUNCTION onModeChange(int id) 
+{
+    switch(menuOptionsOperationalMode.getCurrentValue())
+    {
+        case 0: //UV
+            currentSensorMode = LTR390_MODE_UVS;
+            menuCurrentUVIndex.setVisible(true);
+            menuOfUVLimit.setVisible(true);
+            menuLux.setVisible(false);
+            menuLuxRecommendation.setVisible(false);
+            break;
+        case 1: //ambient light
+            currentSensorMode = LTR390_MODE_ALS;
+            menuCurrentUVIndex.setVisible(false);
+            menuOfUVLimit.setVisible(false);
+            menuLux.setVisible(true);
+            menuLuxRecommendation.setVisible(true);
+            break;
+    }
 }

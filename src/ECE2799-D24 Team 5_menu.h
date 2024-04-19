@@ -39,12 +39,15 @@ extern AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel;
 extern BackMenuItem menuBackOptionsSunscreenOptions;
 extern SubMenuItem menuOptionsSunscreenOptions;
 extern AnalogMenuItem menuOptionsFitzpatrickType;
+extern EnumMenuItem menuOptionsOperationalMode;
 extern BackMenuItem menuBackOptions;
 extern SubMenuItem menuOptions;
 extern TextMenuItem menuBattery;
 extern BooleanMenuItem menuDismissAlert;
 extern EnumMenuItem menuActiveAlert;
 extern AnalogMenuItem menuMinUntilNextRmdr;
+extern EnumMenuItem menuLuxRecommendation;
+extern FloatMenuItem menuLux;
 extern AnalogMenuItem menuOfUVLimit;
 extern AnalogMenuItem menuCurrentUVIndex;
 
@@ -57,6 +60,7 @@ void setupMenu();
 
 void CALLBACK_FUNCTION onDismissAlert(int id);
 void CALLBACK_FUNCTION onFitzpatrickValueUpdate(int id);
+void CALLBACK_FUNCTION onModeChange(int id);
 void CALLBACK_FUNCTION onSPFUpdate(int id);
 void CALLBACK_FUNCTION onSunscreenReminderToggle(int id);
 void CALLBACK_FUNCTION onSunscrnRmdrIntvlChange(int id);

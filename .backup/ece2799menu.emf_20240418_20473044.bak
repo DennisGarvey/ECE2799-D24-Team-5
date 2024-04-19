@@ -45,6 +45,42 @@
     },
     {
       "parentId": 0,
+      "type": "floatItem",
+      "defaultValue": "0.0",
+      "item": {
+        "numDecimalPlaces": 2,
+        "name": "Lux",
+        "variableName": "Lux",
+        "id": 21,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "enumItem",
+      "defaultValue": "0",
+      "item": {
+        "enumEntries": [
+          "Good for Sleeping",
+          "Good for Before Bed",
+          "Not Ideal at Night"
+        ],
+        "name": "Lux Recommendation",
+        "variableName": "LuxReccomendation",
+        "id": 22,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
@@ -127,6 +163,26 @@
         "variableName": "Options",
         "id": 2,
         "eepromAddress": -1,
+        "readOnly": false,
+        "localOnly": false,
+        "visible": true,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 2,
+      "type": "enumItem",
+      "defaultValue": "0",
+      "item": {
+        "enumEntries": [
+          "UV",
+          "Ambient Light"
+        ],
+        "name": "Operational Mode",
+        "variableName": "OptionsOperationalMode",
+        "id": 20,
+        "eepromAddress": -1,
+        "functionName": "onModeChange",
         "readOnly": false,
         "localOnly": false,
         "visible": true,
@@ -300,7 +356,7 @@
     ],
     "lastThemeUuid": "e4524028-edd8-4e0a-ae15-a1f2ba05354f",
     "applicationUUID": "daba275b-c0d1-4690-906c-7184f572ebaa",
-    "applicationName": "Personal Light Monitor",
+    "applicationName": "SunSentinel",
     "lastProperties": [
       {
         "name": "DISPLAY_VARIABLE",
