@@ -30,9 +30,6 @@ extern GraphicsDeviceRenderer renderer;
 // Global Menu Item exports
 extern ActionMenuItem menuTurnOff;
 extern BooleanMenuItem menuOptionsDemoMode;
-extern BooleanMenuItem menuOptionsAmbientLightOptionsAlerts;
-extern BackMenuItem menuBackOptionsAmbientLightOptions;
-extern SubMenuItem menuOptionsAmbientLightOptions;
 extern AnalogMenuItem menuOptionsSunscreenOptionsReminderInterval;
 extern BooleanMenuItem menuOptionsSunscreenOptionsSunscreenReminder;
 extern AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel;

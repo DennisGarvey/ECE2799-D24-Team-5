@@ -45,6 +45,42 @@
     },
     {
       "parentId": 0,
+      "type": "floatItem",
+      "defaultValue": "0.0",
+      "item": {
+        "numDecimalPlaces": 2,
+        "name": "Lux",
+        "variableName": "Lux",
+        "id": 21,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": false,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "enumItem",
+      "defaultValue": "0",
+      "item": {
+        "enumEntries": [
+          "Ideal for Sleeping",
+          "Ideal Before Bed",
+          "Not Ideal at Night"
+        ],
+        "name": "Lux Recommendation",
+        "variableName": "LuxRecommendation",
+        "id": 22,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": false,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
       "type": "analogItem",
       "defaultValue": "0",
       "item": {
@@ -242,37 +278,6 @@
         "id": 14,
         "eepromAddress": -1,
         "functionName": "onSunscrnRmdrIntvlChange",
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 2,
-      "type": "subMenu",
-      "item": {
-        "secured": false,
-        "name": "Ambient Light",
-        "variableName": "OptionsAmbientLightOptions",
-        "id": 7,
-        "eepromAddress": -1,
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 7,
-      "type": "boolItem",
-      "defaultValue": "false",
-      "item": {
-        "naming": "YES_NO",
-        "name": "Alerts",
-        "variableName": "OptionsAmbientLightOptionsAlerts",
-        "id": 8,
-        "eepromAddress": 16,
         "readOnly": false,
         "localOnly": false,
         "visible": true,

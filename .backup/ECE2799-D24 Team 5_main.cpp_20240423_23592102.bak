@@ -9,6 +9,7 @@
 #include <SparkFun_I2C_Mux_Arduino_Library.h>
 #include "config.h"
 #include "ECE2799-D24 Team 5_menu.h"
+#define NUM_SENSORS 4
 
 bool unhandledPress[3] = {false, false, false};
 
@@ -16,9 +17,9 @@ Adafruit_MAX17048 batteryMonitor;
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 QWIICMUX mux;
-Adafruit_LTR390 sensor[3];
-unsigned long UVCount[3];
-unsigned long ALSCount[3];
+Adafruit_LTR390 sensor[NUM_SENSORS];
+unsigned long UVCount[NUM_SENSORS];
+unsigned long ALSCount[NUM_SENSORS];
 ltr390_mode_t currentSensorMode;
 
 unsigned long nextSunscreenReminder = -1;
@@ -121,7 +122,7 @@ void setup()
     progressBar();
     // init sensors
     currentSensorMode = LTR390_MODE_UVS;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < NUM_SENSORS; i++)
     {
         mux.setPort(i);
         sensor[i] = Adafruit_LTR390();
@@ -161,7 +162,7 @@ void progressBar()
     static unsigned int progress = 0;
     progress++;
 
-    display.fillRect(0, 110, progress*(240.0/9), 15, ST77XX_BLUE);
+    display.fillRect(0, 110, progress*(240.0/10), 15, ST77XX_BLUE);
 }
 void loop()
 {
@@ -217,7 +218,7 @@ void loop()
 
 void refreshSensorData()
 {
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < NUM_SENSORS; i++)
     {
         mux.setPort(i);
         if (sensor[i].newDataAvailable())
@@ -241,12 +242,12 @@ void onNewData()
 {
     unsigned long maxUVCount = 0;
     unsigned long maxALSCount = 0;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < NUM_SENSORS; i++)
     {
         if (maxUVCount < UVCount[i])
             maxUVCount = UVCount[i];
     }
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < NUM_SENSORS; i++)
     {
         if (maxALSCount < ALSCount[i])
             maxALSCount = ALSCount[i];
@@ -260,7 +261,13 @@ void onNewData()
         maxUVCount *= 100;
     accumlutedUVCount += (deltaT/1000.0)* maxUVCount;
     menuCurrentUVIndex.setCurrentValue((uint16_t)(UVI * 10));
-    menuLux.setCurrentValue((uint16_t)(LUX*10));
+    menuLux.setFloatValue(LUX);
+    if(LUX>50.0)
+        menuLuxRecommendation.setCurrentValue(2);
+    else if(LUX>5.0)
+        menuLuxRecommendation.setCurrentValue(1);
+    else if(LUX<=5.0)
+        menuLuxRecommendation.setCurrentValue(0);
 }
 
 bool buttonWasPressed(BUTTON button)
@@ -323,9 +330,10 @@ void sendStatusOverSerial()
     Serial.printf("Batt Chg Rate: %f%%/hr\n", batteryMonitor.chargeRate());
     Serial.printf("Wifi Status: %d\n", WiFi.status());
     Serial.printf("Last Sensor Datapoint: %lums (delta: %lums)\n", lastSensorData, millis() - lastSensorData);
-    Serial.printf("UVCount Data: %d %d %d\n", UVCount[0], UVCount[1], UVCount[2]);
-    Serial.printf("UVI Data: %lf %lf %lf\n", UVCount[0] / 2300.0, UVCount[1] / 2300.0, UVCount[2] / 2300.0);
-    Serial.printf("ALSCount Data: %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2]);
+    Serial.printf("UVCount Data: %d %d %d %d\n", UVCount[0], UVCount[1], UVCount[2], UVCount[3]);
+    Serial.printf("UVI Data: %lf %lf %lf %lf\n", UVCount[0] / 2300.0, UVCount[1] / 2300.0, UVCount[2] / 2300.0, UVCount[3] / 2300.0);
+    Serial.printf("ALSCount Data: %d %d %d %d\n", ALSCount[0], ALSCount[1], ALSCount[2], ALSCount[3]);
+    Serial.printf("LUX Data: %lf %lf %lf %lf\n", (0.6*ALSCount[0])/(18*4), (0.6*ALSCount[1])/(18*4), (0.6*ALSCount[2])/(18*4), (0.6*ALSCount[3])/(18*4));
     Serial.printf("UV Accumulation Threshold: ");
     print_uint64_t(accumulatedUVThreshold);
     Serial.printf("\nAccumulated UV (count seconds): ");
@@ -467,12 +475,14 @@ void CALLBACK_FUNCTION onModeChange(int id)
             menuCurrentUVIndex.setVisible(true);
             menuOfUVLimit.setVisible(true);
             menuLux.setVisible(false);
+            menuLuxRecommendation.setVisible(false);
             break;
         case 1: //ambient light
             currentSensorMode = LTR390_MODE_ALS;
             menuCurrentUVIndex.setVisible(false);
             menuOfUVLimit.setVisible(false);
             menuLux.setVisible(true);
+            menuLuxRecommendation.setVisible(true);
             break;
     }
 }

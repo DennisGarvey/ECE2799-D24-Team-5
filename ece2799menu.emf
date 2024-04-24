@@ -286,37 +286,6 @@
     },
     {
       "parentId": 2,
-      "type": "subMenu",
-      "item": {
-        "secured": false,
-        "name": "Ambient Light",
-        "variableName": "OptionsAmbientLightOptions",
-        "id": 7,
-        "eepromAddress": -1,
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 7,
-      "type": "boolItem",
-      "defaultValue": "false",
-      "item": {
-        "naming": "YES_NO",
-        "name": "Alerts",
-        "variableName": "OptionsAmbientLightOptionsAlerts",
-        "id": 8,
-        "eepromAddress": 16,
-        "readOnly": false,
-        "localOnly": false,
-        "visible": true,
-        "staticDataInRAM": false
-      }
-    },
-    {
-      "parentId": 2,
       "type": "boolItem",
       "defaultValue": "false",
       "item": {

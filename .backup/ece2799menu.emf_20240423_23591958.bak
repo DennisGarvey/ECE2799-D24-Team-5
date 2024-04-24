@@ -45,17 +45,33 @@
     },
     {
       "parentId": 0,
-      "type": "analogItem",
-      "defaultValue": "0",
+      "type": "floatItem",
+      "defaultValue": "0.0",
       "item": {
-        "maxValue": 1000,
-        "offset": 0,
-        "divisor": 10,
-        "unitName": "",
-        "step": 1,
+        "numDecimalPlaces": 2,
         "name": "Lux",
         "variableName": "Lux",
         "id": 21,
+        "eepromAddress": -1,
+        "readOnly": true,
+        "localOnly": false,
+        "visible": false,
+        "staticDataInRAM": false
+      }
+    },
+    {
+      "parentId": 0,
+      "type": "enumItem",
+      "defaultValue": "0",
+      "item": {
+        "enumEntries": [
+          "Ideal for Sleeping",
+          "Ideal Before Bed",
+          "Not Ideal at Night"
+        ],
+        "name": "Lux Recommendation",
+        "variableName": "LuxRecommendation",
+        "id": 22,
         "eepromAddress": -1,
         "readOnly": true,
         "localOnly": false,

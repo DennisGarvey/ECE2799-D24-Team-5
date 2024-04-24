@@ -24,11 +24,6 @@ const PROGMEM AnyMenuInfo minfoTurnOff = { "Turn Off", 18, 0xffff, 0, onTurnOff 
 ActionMenuItem menuTurnOff(&minfoTurnOff, nullptr, INFO_LOCATION_PGM);
 const PROGMEM BooleanMenuInfo minfoOptionsDemoMode = { "Demo Mode", 17, 0xffff, 1, NO_CALLBACK, NAMING_ON_OFF };
 BooleanMenuItem menuOptionsDemoMode(&minfoOptionsDemoMode, false, nullptr, INFO_LOCATION_PGM);
-const PROGMEM BooleanMenuInfo minfoOptionsAmbientLightOptionsAlerts = { "Alerts", 8, 16, 1, NO_CALLBACK, NAMING_YES_NO };
-BooleanMenuItem menuOptionsAmbientLightOptionsAlerts(&minfoOptionsAmbientLightOptionsAlerts, false, nullptr, INFO_LOCATION_PGM);
-const PROGMEM SubMenuInfo minfoOptionsAmbientLightOptions = { "Ambient Light", 7, 0xffff, 0, NO_CALLBACK };
-BackMenuItem menuBackOptionsAmbientLightOptions(&minfoOptionsAmbientLightOptions, &menuOptionsAmbientLightOptionsAlerts, INFO_LOCATION_PGM);
-SubMenuItem menuOptionsAmbientLightOptions(&minfoOptionsAmbientLightOptions, &menuBackOptionsAmbientLightOptions, &menuOptionsDemoMode, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoOptionsSunscreenOptionsReminderInterval = { "Reminder Interval", 14, 0xffff, 290, onSunscrnRmdrIntvlChange, 10, 1, "min" };
 AnalogMenuItem menuOptionsSunscreenOptionsReminderInterval(&minfoOptionsSunscreenOptionsReminderInterval, 110, nullptr, INFO_LOCATION_PGM);
 const PROGMEM BooleanMenuInfo minfoOptionsSunscreenOptionsSunscreenReminder = { "Sunscreen Reminder", 5, 13, 1, onSunscreenReminderToggle, NAMING_ON_OFF };
@@ -37,7 +32,7 @@ const PROGMEM AnalogMenuInfo minfoOptionsSunscreenOptionsSPFLevel = { "SPF Level
 AnalogMenuItem menuOptionsSunscreenOptionsSPFLevel(&minfoOptionsSunscreenOptionsSPFLevel, 0, &menuOptionsSunscreenOptionsSunscreenReminder, INFO_LOCATION_PGM);
 const PROGMEM SubMenuInfo minfoOptionsSunscreenOptions = { "Sunscreen", 4, 0xffff, 0, NO_CALLBACK };
 BackMenuItem menuBackOptionsSunscreenOptions(&minfoOptionsSunscreenOptions, &menuOptionsSunscreenOptionsSPFLevel, INFO_LOCATION_PGM);
-SubMenuItem menuOptionsSunscreenOptions(&minfoOptionsSunscreenOptions, &menuBackOptionsSunscreenOptions, &menuOptionsAmbientLightOptions, INFO_LOCATION_PGM);
+SubMenuItem menuOptionsSunscreenOptions(&minfoOptionsSunscreenOptions, &menuBackOptionsSunscreenOptions, &menuOptionsDemoMode, INFO_LOCATION_PGM);
 const PROGMEM AnalogMenuInfo minfoOptionsFitzpatrickType = { "Fitzpatrick Type", 16, 0xffff, 5, onFitzpatrickValueUpdate, 1, 1, "" };
 AnalogMenuItem menuOptionsFitzpatrickType(&minfoOptionsFitzpatrickType, 0, &menuOptionsSunscreenOptions, INFO_LOCATION_PGM);
 const char enumStrOptionsOperationalMode_0[] PROGMEM = "UV";
@@ -82,9 +77,9 @@ void setupMenu() {
     menuMinUntilNextRmdr.setReadOnly(true);
     menuLux.setReadOnly(true);
     menuActiveAlert.setReadOnly(true);
+    menuBattery.setReadOnly(true);
     menuOfUVLimit.setReadOnly(true);
     menuLuxRecommendation.setReadOnly(true);
-    menuBattery.setReadOnly(true);
     menuMinUntilNextRmdr.setVisible(false);
     menuLux.setVisible(false);
     menuLuxRecommendation.setVisible(false);
