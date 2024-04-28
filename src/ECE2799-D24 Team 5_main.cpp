@@ -210,7 +210,16 @@ void loop()
         if (lastFlip + 250 < millis())
         {
             flipflop = !flipflop;
-            tone(16, flipflop ? 1000 : 1250);
+            switch(menuActiveAlert.getCurrentValue())
+            {
+                case 1:
+                    tone(16, flipflop ? 1000 : 1250);
+                    break;
+                case 3: 
+                    tone(16, flipflop ? 1500 : 1750);
+                    break;
+            }
+            
             lastFlip = millis();
         }
     }
@@ -329,6 +338,7 @@ void sendStatusOverSerial()
     Serial.printf("Batt Percent: %.1f%%\n", batteryMonitor.cellPercent());
     Serial.printf("Batt Chg Rate: %f%%/hr\n", batteryMonitor.chargeRate());
     Serial.printf("Wifi Status: %d\n", WiFi.status());
+    Serial.printf("Active Alert: %d\n", menuActiveAlert.getCurrentValue());
     Serial.printf("Last Sensor Datapoint: %lums (delta: %lums)\n", lastSensorData, millis() - lastSensorData);
     Serial.printf("UVCount Data: %d %d %d %d\n", UVCount[0], UVCount[1], UVCount[2], UVCount[3]);
     Serial.printf("UVI Data: %lf %lf %lf %lf\n", UVCount[0] / 2300.0, UVCount[1] / 2300.0, UVCount[2] / 2300.0, UVCount[3] / 2300.0);
